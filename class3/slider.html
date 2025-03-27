@@ -1,0 +1,158 @@
+<!---<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Background Image Fit</title>
+    <style>
+      .container {
+        background-image: url("./images/tom.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 200vh;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container"></div>
+  </body>
+</html>
+--->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Background Image Slider</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+
+      .container {
+        width: 200vh;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: background-image 1s ease-in-out;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        cursor: pointer;
+        font-size: 24px;
+        z-index: 10;
+      }
+
+      .left {
+        left: 10px;
+      }
+
+      .right {
+        right: 10px;
+      }
+
+      .thumbnails {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+
+      .thumbnails img {
+        width: 100px;
+        height: 70px;
+        margin: 5px;
+        cursor: pointer;
+        border: 2px solid transparent;
+      }
+
+      .thumbnails img.active {
+        border: 2px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="imageContainer">
+      <button class="arrow left" onclick="prevImage()">&#10094;</button>
+      <button class="arrow right" onclick="nextImage()">&#10095;</button>
+    </div>
+    <div class="thumbnails" id="thumbnailContainer"></div>
+
+    <script>
+      const images = [
+        "./images/tom.jpg",
+        "./images/chotta.jpg",
+        "./images/m1.jpeg",
+      ];
+
+      let index = 0;
+      const container = document.getElementById("imageContainer");
+      const thumbnailContainer = document.getElementById("thumbnailContainer");
+
+      function changeImage() {
+        container.style.backgroundImage = `url('${images[index]}')`;
+        updateActiveThumbnail();
+      }
+
+      function nextImage() {
+        index = (index + 1) % images.length;
+        changeImage();
+      }
+
+      function prevImage() {
+        index = (index - 1 + images.length) % images.length;
+        changeImage();
+      }
+
+      function selectImage(selectedIndex) {
+        index = selectedIndex;
+        changeImage();
+      }
+
+      function updateActiveThumbnail() {
+        document.querySelectorAll(".thumbnails img").forEach((img, i) => {
+          img.classList.toggle("active", i === index);
+        });
+      }
+
+      function createThumbnails() {
+        images.forEach((imgSrc, i) => {
+          const imgElement = document.createElement("img");
+          imgElement.src = imgSrc;
+          imgElement.onclick = () => selectImage(i);
+          if (i === 0) imgElement.classList.add("active");
+          thumbnailContainer.appendChild(imgElement);
+        });
+      }
+
+      createThumbnails();
+      setInterval(nextImage, 3000);
+      changeImage(); // Initialize with the first image
+    </script>
+  </body>
+</html>
